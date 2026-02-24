@@ -55,7 +55,7 @@ import { ref } from "vue";
 
 const emit = defineEmits(["close", "login"]);
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3001/api";
+const API_BASE = "http://localhost:3001/api";
 
 const isLogin = ref(true);
 const loading = ref(false);

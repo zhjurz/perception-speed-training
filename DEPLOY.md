@@ -42,65 +42,65 @@ npm run build
 修改 `server/index.js`，添加静态文件服务：
 
 ```javascript
-import express from 'express'
-import cors from 'cors'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
-import { mkdirSync, existsSync } from 'fs'
-import { randomUUID } from 'crypto'
-import db from './database.js'
-import authRoutes from './routes/auth.js'
-import wordsRoutes from './routes/words.js'
-import trainingRoutes from './routes/training.js'
+import express from "express";
+import cors from "cors";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+import { mkdirSync, existsSync } from "fs";
+import { randomUUID } from "crypto";
+import db from "./database.js";
+import authRoutes from "./routes/auth.js";
+import wordsRoutes from "./routes/words.js";
+import trainingRoutes from "./routes/training.js";
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-const dataDir = join(__dirname, 'data')
+const dataDir = join(__dirname, "data");
 if (!existsSync(dataDir)) {
-  mkdirSync(dataDir, { recursive: true })
+  mkdirSync(dataDir, { recursive: true });
 }
 
-const app = express()
-const PORT = process.env.PORT || 3001
+const app = express();
+const PORT = process.env.PORT || 3001;
 
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
 
 // API 路由
-app.use('/api/auth', authRoutes)
-app.use('/api/words', wordsRoutes)
-app.use('/api/training', trainingRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/words", wordsRoutes);
+app.use("/api/training", trainingRoutes);
 
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() })
-})
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", timestamp: new Date().toISOString() });
+});
 
 // 生产环境：服务前端静态文件
-if (process.env.NODE_ENV === 'production') {
-  const distPath = join(__dirname, '../dist')
-  app.use(express.static(distPath))
-  
+if (process.env.NODE_ENV === "production") {
+  const distPath = join(__dirname, "../dist");
+  app.use(express.static(distPath));
+
   // 所有非 API 路由返回 index.html (SPA 支持)
-  app.get('*', (req, res) => {
-    res.sendFile(join(distPath, 'index.html'))
-  })
+  app.get("*", (req, res) => {
+    res.sendFile(join(distPath, "index.html"));
+  });
 }
 
 // 错误处理
 app.use((err, req, res, next) => {
-  console.error('Error:', err)
-  res.status(500).json({ error: '服务器内部错误' })
-})
+  console.error("Error:", err);
+  res.status(500).json({ error: "服务器内部错误" });
+});
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`)
-})
+  console.log(`Server running on http://localhost:${PORT}`);
+});
 
-process.on('SIGINT', () => {
-  db.close()
-  process.exit(0)
-})
+process.on("SIGINT", () => {
+  db.close();
+  process.exit(0);
+});
 ```
 
 ### 5. 创建 PM2 配置文件
@@ -108,24 +108,26 @@ process.on('SIGINT', () => {
 ```javascript
 // ecosystem.config.cjs
 module.exports = {
-  apps: [{
-    name: 'pas-training',
-    cwd: './server',
-    script: 'index.js',
-    instances: 1,
-    autorestart: true,
-    watch: false,
-    max_memory_restart: '1G',
-    env: {
-      NODE_ENV: 'development',
-      PORT: 3001
+  apps: [
+    {
+      name: "pas-training",
+      cwd: "./server",
+      script: "index.js",
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: "1G",
+      env: {
+        NODE_ENV: "development",
+        PORT: 3001,
+      },
+      env_production: {
+        NODE_ENV: "production",
+        PORT: 3001,
+      },
     },
-    env_production: {
-      NODE_ENV: 'production',
-      PORT: 3001
-    }
-  }]
-}
+  ],
+};
 ```
 
 ### 6. 启动服务
@@ -216,7 +218,7 @@ CMD ["node", "server/index.js"]
 ### 2. 创建 docker-compose.yml
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   app:
@@ -267,7 +269,7 @@ npm run build
 修改 `src/stores/training.js` 和 `src/components/UserLogin.vue` 中的 `API_BASE`：
 
 ```javascript
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:3001/api'
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3001/api";
 ```
 
 创建 `.env.production`：

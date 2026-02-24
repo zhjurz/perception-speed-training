@@ -3,7 +3,7 @@ import { ref, computed } from "vue";
 import { useWordGenerator } from "../composables/useWordGenerator.js";
 import { useQuestionGenerator } from "../composables/useQuestionGenerator.js";
 
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3001/api";
+const API_BASE = "http://localhost:3001/api";
 
 export const useTrainingStore = defineStore("training", () => {
   const difficulty = ref("medium");
