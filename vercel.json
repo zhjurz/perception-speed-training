@@ -3,11 +3,21 @@
   "outputDirectory": "dist",
   "framework": "vue",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs20.x"
+    {
+      "source": "/api/auth/(.*)",
+      "destination": "/api/auth/$1"
+    },
+    {
+      "source": "/api/training/(.*)",
+      "destination": "/api/training/$1"
+    },
+    {
+      "source": "/api/words/(.*)",
+      "destination": "/api/words/$1"
+    },
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
-  }
+  ]
 }
